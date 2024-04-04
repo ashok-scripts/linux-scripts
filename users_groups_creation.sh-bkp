@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Function to create a user
+create_user() {
+    read -p "Enter username: " username
+    read -s -p "Enter password: " password
+    echo
+    sudo useradd -m -s /bin/bash "$username"
+    echo "$username:$password" | sudo chpasswd
+    echo "User $username created."
+}
+
+# Function to create a group
+create_group() {
+    read -p "Enter group name: " groupname
+    sudo groupadd "$groupname"
+    echo "Group $groupname created."
+}
+
+# Function to add user to a group
+add_to_group() {
+    read -p "Enter username: " username
+    read -p "Enter group name: " groupname
+    sudo usermod -aG "$groupname" "$username"
+    echo "User $username added to group $groupname."
+}
+
+# Main menu
+while true; do
+    echo "1. Create user"
+    echo "2. Create group"
+    echo "3. Add user to group"
+    echo "4. Exit"
+    read -p "Choose an option: " choice
+
+    case $choice in
+        1) create_user ;;
+        2) create_group ;;
+        3) add_to_group ;;
+        4) exit ;;
+        *) echo "Invalid option. Please choose again." ;;
+    esac
+done
+
